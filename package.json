@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@octokit/auth-app": "6.0.3",
-    "@octokit/auth-token": "4.0.0",
+    "@octokit/auth-token": "5.0.1",
     "@octokit/types": "12.6.0",
     "@primer/octicons-react": "19.8.0",
     "@primer/react": "36.10.0",
