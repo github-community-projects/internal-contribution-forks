@@ -2,13 +2,15 @@ import { ChevronRightIcon } from '@primer/octicons-react'
 import { ActionList, Avatar, Box, Octicon } from '@primer/react'
 import { personalOctokit } from 'bot/octokit'
 import { getAuthServerSideProps } from 'components/auth-guard'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
 
 interface OrganizationsProps {}
 
 const Organizations: FC<OrganizationsProps> = () => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [organizations, setOrganizations] = useState<
     Awaited<ReturnType<typeof getAllOrganizations>>
   >([])
@@ -21,15 +23,35 @@ const Organizations: FC<OrganizationsProps> = () => {
   }
 
   useEffect(() => {
+    if (status === 'loading') {
+      return
+    }
+
+    if (!session?.user) {
+      // redirect to homepage
+      router.replace('/')
+    }
+  }, [session, router, session?.user, status])
+
+  useEffect(() => {
     // TODO: Make this type work
     const { accessToken } = (session?.user as any) ?? {}
     if (!accessToken) {
       return
     }
 
-    getAllOrganizations(accessToken).then((orgs) => {
-      setOrganizations(orgs)
-    })
+    getAllOrganizations(accessToken)
+      .then((orgs) => {
+        setOrganizations(orgs)
+      })
+      .catch((err) => {
+        console.error(err)
+
+        // If there's an auth error, sign the user out and redirect them to the homepage
+        if (err.message === 'Bad credentials') {
+          signOut()
+        }
+      })
   }, [session])
 
   return (
