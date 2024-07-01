@@ -71,13 +71,13 @@ default_permissions:
   organization_custom_properties: admin
 
 # The name of the GitHub App. Defaults to the name specified in package.json
-name: internal-contribution-forks
+name: private-mirrors
 
 # The homepage of your GitHub App.
-url: https://github.com/github-community-projects/internal-contribution-forks
+url: https://github.com/github-community-projects/private-mirrors
 
 # A description of the GitHub App.
-description: A GitHub App that allows you to contribute upstream using a "private fork".
+description: A GitHub App that allows you to contribute upstream using private mirrors of public repos.
 
 # Set to true when your GitHub App is available to the public or false when it is only accessible to the owner of the app. Default: true
 public: true

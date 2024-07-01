@@ -6,7 +6,7 @@ This project uses GitHub issues to track bugs and feature requests. Please searc
 
 For help or questions about using this project, please file an issue or start a GitHub discussion.
 
-Internal Contribution Forks is under active development and maintained by GitHub staff **and the community**. We will do our best to respond to support, feature requests, and community questions in a timely manner.
+The Private Mirrors app is under active development and maintained by GitHub staff **and the community**. We will do our best to respond to support, feature requests, and community questions in a timely manner.
 
 ## GitHub Support Policy
 

@@ -1,14 +1,14 @@
-[![CodeQL](https://github.com/github-community-projects/internal-contribution-forks/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/github-community-projects/internal-contribution-forks/actions/workflows/github-code-scanning/codeql)
-[![Docker Build](https://github.com/github-community-projects/internal-contribution-forks/actions/workflows/docker-build.yml/badge.svg)](https://github.com/github-community-projects/internal-contribution-forks/actions/workflows/docker-build.yml)
-[![Lint](https://github.com/github-community-projects/internal-contribution-forks/actions/workflows/lint.yml/badge.svg)](https://github.com/github-community-projects/internal-contribution-forks/actions/workflows/lint.yml)
-[![Tests](https://github.com/github-community-projects/internal-contribution-forks/actions/workflows/tests.yml/badge.svg)](https://github.com/github-community-projects/internal-contribution-forks/actions/workflows/tests.yml)
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/github-community-projects/internal-contribution-forks/badge)](https://scorecard.dev/viewer/?uri=github.com/github-community-projects/internal-contribution-forks)
+[![CodeQL](https://github.com/github-community-projects/private-mirrors/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/github-community-projects/private-mirrors/actions/workflows/github-code-scanning/codeql)
+[![Docker Build](https://github.com/github-community-projects/private-mirrors/actions/workflows/docker-build.yml/badge.svg)](https://github.com/github-community-projects/private-mirrors/actions/workflows/docker-build.yml)
+[![Lint](https://github.com/github-community-projects/private-mirrors/actions/workflows/lint.yml/badge.svg)](https://github.com/github-community-projects/private-mirrors/actions/workflows/lint.yml)
+[![Tests](https://github.com/github-community-projects/private-mirrors/actions/workflows/tests.yml/badge.svg)](https://github.com/github-community-projects/private-mirrors/actions/workflows/tests.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/github-community-projects/private-mirrors/badge)](https://scorecard.dev/viewer/?uri=github.com/github-community-projects/private-mirrors)
 
 <h1 align="center">
-  Internal Contribution Forks
+  GitHub Private Mirrors App
 </h1>
 
-<h4 align="center">A GitHub App that allows you to contribute upstream using a 'private fork'</h4>
+<h4 align="center">A GitHub App that allows you to contribute upstream using private mirrors of public repositories</h4>
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
@@ -18,16 +18,16 @@
   <a href="#license">MIT License</a>
 </p>
 
-Internal Contribution Forks (ICF) is GitHub App that allows you to work on contributions to an upstream open source project using a private repository in your own organization. This is useful for developing and checking contributions internally before making any commits publicly visible.
+The Private Mirrors App (PMA) is GitHub App that allows you to work on contributions to an upstream open source project using a private repository in your own organization. This is useful for developing and checking contributions internally before making any commits publicly visible.
 
 For a video overview, check out [this short presentation and demo video](https://www.youtube.com/watch?v=xdiFALgHa2Y).
 
-[![ICF YouTube Video Thumbnail](https://github.com/user-attachments/assets/37eaed15-bb23-4ba2-9c0e-04b6bec8a1e7)](https://www.youtube.com/watch?v=xdiFALgHa2Y)
+[![PMA YouTube Video Thumbnail](https://github.com/user-attachments/assets/37eaed15-bb23-4ba2-9c0e-04b6bec8a1e7)](https://www.youtube.com/watch?v=xdiFALgHa2Y)
 
 > [!IMPORTANT]
 > 📣 EMU support is now available! Check out the [hosting - GHEC](#integrating-the-app-into-ghec) section for more information.
 >
-> This app is still a work in progress and is pre-1.0 _public beta_. We are actively working on improving it with beta testers, and if you're interested in using it for your organization, [we'd love to hear from you](https://github.com/github-community-projects/internal-contribution-forks/issues/new)!
+> This app is still a work in progress and is pre-1.0 _public beta_. We are actively working on improving it with beta testers, and if you're interested in using it for your organization, [we'd love to hear from you](https://github.com/github-community-projects/private-mirrors/issues/new)!
 
 ## Background
 
@@ -42,7 +42,7 @@ To succeed, open source advocates and OSPOs need to address their stakeholders' 
 
 Addressing these concerns creates opportunities for enterprise development teams to participate more deeply in open source and foster a collaborative relationship with the open source community.
 
-> Internal Contribution Forks (ICF) is a GitHub App paired with a UI that manages the lifecycle of private mirrors, as well as the synchronization of code between the public fork of an upstream project and the private mirrors where the enterprise teams are working.
+> The Private Mirrors App (PMA) is a GitHub App paired with a UI that manages the lifecycle of private mirrors, as well as the synchronization of code between the public fork of an upstream project and the private mirrors where the enterprise teams are working.
 
 ## Key Features
 
@@ -55,7 +55,7 @@ Addressing these concerns creates opportunities for enterprise development teams
 
 High Level Flow:
 
-![Time-series diagram showing work starting upstream, moving into a public fork, and through the ICF app into a private mirror](https://github.com/user-attachments/assets/dfc3d0fa-14e3-4c8a-9ea3-921950cab98b)
+![Time-series diagram showing work starting upstream, moving into a public fork, and through PMA into a private mirror](https://github.com/user-attachments/assets/dfc3d0fa-14e3-4c8a-9ea3-921950cab98b)
 
 The app uses an intermediary public fork to merge the private mirror into, and then enables the normal OSS contributor workflow into the upstream repository. This allows users to keep the private repo private while still allowing us to contribute to the upstream repository. Check out this [application flow diagram](./docs/architecture.md) for a more detailed look at how the app works.
 
@@ -71,8 +71,8 @@ Configuration is contained in a `.env` file which you'll need to customize for y
 - `ALLOWED_HANDLES` variable to a comma-separated list of GitHub user handles which ought to be allowed to access the app to create mirrors. If unset, all users who are members of the organization will be allowed to use the app.
 
 ```sh
-docker build -t internal-contribution-forks .
-docker run --env-file=.env -p 3000:3000 internal-contribution-forks
+docker build -t private-mirrors .
+docker run --env-file=.env -p 3000:3000 private-mirrors
 
 # alternatively, you can use docker compose
 docker compose up
@@ -99,7 +99,7 @@ The authentication of the UI will still need to be a user's github.com user, but
 
 ## Usage
 
-Once the app is installed, follow this document on [Using the ICF App](docs/using-the-app.md) to get the repository fork and mirrors set up for work.
+Once the app is installed, follow this document on [Using the Private Mirrors App](docs/using-the-app.md) to get the repository fork and mirrors set up for work.
 
 ## Developing
 
@@ -162,7 +162,7 @@ Check out the [CODEOWNERS](./CODEOWNERS) file to see who to contact for code cha
 
 ## Support
 
-If you need support using this project or have questions about it, please [open an issue in this repository](https://github.com/github-community-projects/internal-contribution-forks/issues/new) and we'd be happy to help. Requests made directly to GitHub staff or the support team will be redirected here to open an issue. GitHub SLA's and support/services contracts do not apply to this repository.
+If you need support using this project or have questions about it, please [open an issue in this repository](https://github.com/github-community-projects/private-mirrors/issues/new) and we'd be happy to help. Requests made directly to GitHub staff or the support team will be redirected here to open an issue. GitHub SLA's and support/services contracts do not apply to this repository.
 
 ## More OSPO Tools
 

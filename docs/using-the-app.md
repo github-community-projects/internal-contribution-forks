@@ -1,8 +1,8 @@
-## How to get started working with Internal Contribution Forks
+## How to get started working with the GitHub Private Mirrors App (PMA)
 
 1. Set up an organization to host your open source work. Many enterprises use a primary organization which mainly contains private repos or company-wide projects owned by the enterprise. Creating a separate organization which hosts your open-source efforts - both forks of upstream projects in use for this app, as well as open projects that expect a lot of external collaborators - makes for cleaner administrative/security boundaries.
 
-2. Install the app into that organization. Currently you'll need to self-host the application, following the [instructions in the project's README](../README.md), but we are working towards a hosted solution as well - if this is a blocker for you please comment on [this issue](https://github.com/github-community-projects/internal-contribution-forks/issues/122) to register your interest and say more about your use case.
+2. Install the app into that organization. Currently you'll need to self-host the application, following the [instructions in the project's README](../README.md), but we are working towards a hosted solution as well - if this is a blocker for you please comment on [this issue](https://github.com/github-community-projects/private-mirrors/issues/122) to register your interest and say more about your use case.
 
 3. Fork an upstream project into the organization's namespace. This will create your **public fork**. A decision point for administrators is whether to permit any user to fork new projects into the organizations, or restrict the ability to fork. These permissions are managed by [the organization's forking policy](https://docs.github.com/en/enterprise-cloud@latest/organizations/managing-organization-settings/managing-the-forking-policy-for-your-organization). A more permissive posture can lower the barrier to contribution, but be careful not to circumvent company policy on approving upstream work.
 
@@ -10,7 +10,7 @@
 
 ![List of public forks inside the organization](images/public-forks-inside-org.png)
 
-5. Click on the name of the public fork you just created. Click **Create mirror** and give it an unambiguous name, then click **Confirm**. This will create a **private mirror** of the repo. The app syncs commits on the private mirror's default branch to a new branch on the public fork. For example, the default branch of a private mirror named `silverteam-website` will be synced to a branch named `silverteam-website` on the public fork. So it's a good idea to be verbose in your name and describe how this fork will be used. ICF's workflow supports multiple private mirrors per public fork, to enable different individuals or teams to work on the default branches of their respective mirrors without interefering with each other.
+5. Click on the name of the public fork you just created. Click **Create mirror** and give it an unambiguous name, then click **Confirm**. This will create a **private mirror** of the repo. The app syncs commits on the private mirror's default branch to a new branch on the public fork. For example, the default branch of a private mirror named `silverteam-website` will be synced to a branch named `silverteam-website` on the public fork. So it's a good idea to be verbose in your name and describe how this fork will be used. PMA's workflow supports multiple private mirrors per public fork, to enable different individuals or teams to work on the default branches of their respective mirrors without interefering with each other.
 
 ![Dialog showing creation of new private mriror](images/create-new-mirror.png)
 

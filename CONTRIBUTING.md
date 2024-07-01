@@ -1,7 +1,7 @@
 ## Contributing
 
-[fork]: https://github.com/github-community-projects/internal-contribution-forks/fork
-[pr]: https://github.com/github-community-projects/internal-contribution-forks/compare
+[fork]: https://github.com/github-community-projects/private-mirrors/fork
+[pr]: https://github.com/github-community-projects/private-mirrors/compare
 [code-of-conduct]: CODE_OF_CONDUCT.md
 
 Hi there! We're thrilled that you'd like to contribute to this project. Your help is essential for keeping it great.
@@ -31,7 +31,7 @@ Here are a few things you can do that will increase the likelihood of your pull 
 
 Releases are automated if a pull request is labelled with our [semver related labels](.github/release-drafter.yml) or with the `vuln` or `release` labels.
 
-You can also manually initiate a release you can do so through the GitHub Actions UI. If you have permissions to do so, you can navigate to the [Actions tab](https://github.com/github-community-projects/internal-contribution-forks/actions/workflows/release.yml) and select the `Run workflow` button. This will allow you to select the branch to release from and the version to release.
+You can also manually initiate a release you can do so through the GitHub Actions UI. If you have permissions to do so, you can navigate to the [Actions tab](https://github.com/github-community-projects/private-mirrors/actions/workflows/release.yml) and select the `Run workflow` button. This will allow you to select the branch to release from and the version to release.
 
 ## Resources
 
