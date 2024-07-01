@@ -20,9 +20,9 @@
   },
   "dependencies": {
     "@octokit/auth-app": "6.1.1",
-    "@octokit/graphql-schema": "15.18.1",
-    "@primer/octicons-react": "19.9.0",
-    "@primer/react": "36.21.0",
+    "@octokit/graphql-schema": "15.22.0",
+    "@primer/octicons-react": "19.10.0",
+    "@primer/react": "36.22.0",
     "@t3-oss/env-nextjs": "0.10.1",
     "@tanstack/react-query": "4.36.1",
     "@trpc/client": "10.45.2",
@@ -42,18 +42,18 @@
     "superjson": "2.2.1",
     "tempy": "1.0.1",
     "tslog": "4.9.3",
-    "undici": "6.18.2",
+    "undici": "6.19.2",
     "zod": "3.23.8"
   },
   "devDependencies": {
     "@babel/preset-env": "7.24.7",
     "@tanstack/eslint-plugin-query": "5.43.1",
     "@types/jest": "29.5.12",
-    "@types/node": "20.14.2",
+    "@types/node": "20.14.8",
     "@types/node-fetch": "2.6.11",
     "@types/react": "18.3.3",
-    "@typescript-eslint/eslint-plugin": "7.13.0",
-    "@typescript-eslint/parser": "7.13.0",
+    "@typescript-eslint/eslint-plugin": "7.14.1",
+    "@typescript-eslint/parser": "7.14.1",
     "babel-jest": "29.7.0",
     "concurrently": "8.2.2",
     "dotenv-load": "3.0.0",
@@ -65,10 +65,10 @@
     "lint-staged": "15.2.7",
     "nock": "14.0.0-beta.7",
     "prettier": "3.3.2",
-    "ts-jest": "29.1.4",
+    "ts-jest": "29.1.5",
     "ts-node": "10.9.2",
-    "typescript": "5.4.5",
-    "typescript-eslint": "7.13.0"
+    "typescript": "5.5.2",
+    "typescript-eslint": "7.14.1"
   },
   "engines": {
     "node": ">= 18"
