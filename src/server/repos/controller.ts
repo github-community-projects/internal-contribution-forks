@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
+import { TRPCError } from '@trpc/server'
 import simpleGit, { SimpleGitOptions } from 'simple-git'
 import { generateAuthUrl } from 'utils/auth'
 import { temporaryDirectory } from 'utils/dir'
@@ -18,7 +19,6 @@ import {
   EditMirrorSchema,
   ListMirrorsSchema,
 } from './schema'
-import { TRPCError } from '@trpc/server'
 
 const reposApiLogger = logger.getSubLogger({ name: 'repos-api' })
 
@@ -134,6 +134,31 @@ export const createMirrorHandler = async ({
         custom_properties: {
           fork: `${input.forkRepoOwner}/${input.forkRepoName}`,
         },
+      })
+
+      reposApiLogger.info('Created new repo', { newRepo })
+
+      // apply settings for actions
+      await privateOctokit.request(
+        'PUT /repos/{owner}/{repo}/actions/permissions',
+        {
+          owner: privateOrg,
+          repo: input.newRepoName,
+          enabled: input.settings.actions.enabled,
+          allowed_actions: input.settings.actions.enabled
+            ? input.settings.actions.allowedActions
+            : undefined,
+          headers: {
+            'X-GitHub-Api-Version': '2022-11-28',
+          },
+        },
+      )
+
+      reposApiLogger.debug('Applied settings for actions for repo', {
+        owner: privateOrg,
+        repo: input.newRepoName,
+        enabled: input.settings.actions.enabled,
+        allowed_actions: input.settings.actions.allowedActions,
       })
 
       const defaultBranch = forkData.data.default_branch

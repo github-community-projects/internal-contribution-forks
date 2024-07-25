@@ -19,6 +19,7 @@
     "prepare": "test -d node_modules/husky && husky || echo \"husky is not installed\""
   },
   "dependencies": {
+    "@hookform/resolvers": "3.7.0",
     "@octokit/auth-app": "6.1.1",
     "@octokit/graphql-schema": "15.25.0",
     "@primer/octicons-react": "19.11.0",
@@ -37,6 +38,7 @@
     "proxy-agent": "6.4.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-hook-form": "7.52.1",
     "simple-git": "3.25.0",
     "styled-components": "5.3.11",
     "superjson": "2.2.1",

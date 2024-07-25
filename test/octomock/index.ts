@@ -1,6 +1,7 @@
 // This is taken from https://github.com/Chocrates/octomock
 
 let mockFunctions = {
+  request: jest.fn(),
   config: {
     get: jest.fn(),
   },
@@ -306,6 +307,7 @@ export class Octomock {
   mockFunctions: {
     rest: Record<string, Record<string, jest.Mock>>
     config: Record<string, jest.Mock>
+    request: jest.Mock
   }
   defaultContext: { payload: { issue: { body: string; user: {} } } }
 

@@ -14,11 +14,11 @@ jest.mock('simple-git', () => {
 })
 
 import * as config from '../../src/bot/config'
-import * as auth from '../../src/utils/auth'
 import reposRouter from '../../src/server/repos/router'
+import * as auth from '../../src/utils/auth'
+import { t } from '../../src/utils/trpc-server'
 import { Octomock } from '../octomock'
 import { createTestContext } from '../utils/auth'
-import { t } from '../../src/utils/trpc-server'
 const om = new Octomock()
 
 jest.mock('../../src/bot/config')
@@ -127,6 +127,9 @@ describe('Repos router', () => {
       fakeOrgCustomProperties,
     )
     om.mockFunctions.rest.repos.createInOrg.mockResolvedValue(fakeMirrorRepo)
+    om.mockFunctions.request.mockResolvedValue({
+      status: 204,
+    })
 
     const res = await caller.createMirror({
       forkId: 'test',
@@ -135,6 +138,11 @@ describe('Repos router', () => {
       forkRepoOwner: 'github',
       newBranchName: 'test',
       newRepoName: 'test',
+      settings: {
+        actions: {
+          enabled: false,
+        },
+      },
     })
 
     // TODO: use real git operations and verify fs state after
@@ -144,6 +152,19 @@ describe('Repos router', () => {
     expect(stubbedGit.addRemote).toHaveBeenCalledTimes(1)
     expect(stubbedGit.push).toHaveBeenCalledTimes(2)
     expect(stubbedGit.checkoutBranch).toHaveBeenCalledTimes(1)
+    expect(om.mockFunctions.request).toHaveBeenCalledTimes(1)
+    expect(om.mockFunctions.request).toHaveBeenCalledWith(
+      'PUT /repos/{owner}/{repo}/actions/permissions',
+      {
+        owner: 'github-test',
+        repo: 'test',
+        enabled: false,
+        allowed_actions: undefined,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      },
+    )
 
     expect(res).toEqual({
       success: true,
@@ -165,6 +186,9 @@ describe('Repos router', () => {
     om.mockFunctions.rest.orgs.get.mockResolvedValue(fakeOrg)
     om.mockFunctions.rest.repos.get.mockResolvedValue(fakeMirrorRepo)
     om.mockFunctions.rest.repos.delete.mockResolvedValue({})
+    om.mockFunctions.request.mockResolvedValue({
+      status: 204,
+    })
 
     await caller
       .createMirror({
@@ -174,6 +198,11 @@ describe('Repos router', () => {
         forkRepoOwner: 'github',
         newBranchName: 'test',
         newRepoName: 'test',
+        settings: {
+          actions: {
+            enabled: false,
+          },
+        },
       })
       .catch((error) => {
         expect(error.message).toEqual('Repo github-test/test already exists')
@@ -183,6 +212,7 @@ describe('Repos router', () => {
     expect(om.mockFunctions.rest.repos.get).toHaveBeenCalledTimes(1)
     expect(om.mockFunctions.rest.repos.delete).toHaveBeenCalledTimes(0)
     expect(stubbedGit.clone).toHaveBeenCalledTimes(0)
+    expect(om.mockFunctions.request).toHaveBeenCalledTimes(0)
   })
 
   it('should cleanup repos when there is an error', async () => {
@@ -200,6 +230,9 @@ describe('Repos router', () => {
     om.mockFunctions.rest.repos.get.mockResolvedValueOnce(repoNotFound)
     om.mockFunctions.rest.repos.get.mockResolvedValueOnce(fakeMirrorRepo)
     om.mockFunctions.rest.repos.delete.mockResolvedValue({})
+    om.mockFunctions.request.mockResolvedValue({
+      status: 204,
+    })
 
     stubbedGit.clone.mockRejectedValue(new Error('clone error'))
 
@@ -211,6 +244,11 @@ describe('Repos router', () => {
         forkRepoOwner: 'github',
         newBranchName: 'test',
         newRepoName: 'test',
+        settings: {
+          actions: {
+            enabled: false,
+          },
+        },
       })
       .catch((error) => {
         expect(error.message).toEqual('clone error')
@@ -223,6 +261,7 @@ describe('Repos router', () => {
       repo: 'test',
     })
     expect(stubbedGit.clone).toHaveBeenCalledTimes(1)
+    expect(om.mockFunctions.request).toHaveBeenCalledTimes(0)
   })
 
   it('dual-org: should cleanup repos when there is an error', async () => {
@@ -251,6 +290,11 @@ describe('Repos router', () => {
         forkRepoOwner: 'github',
         newBranchName: 'test',
         newRepoName: 'test',
+        settings: {
+          actions: {
+            enabled: false,
+          },
+        },
       })
       .catch((error) => {
         expect(error.message).toEqual('clone error')
@@ -263,6 +307,141 @@ describe('Repos router', () => {
       repo: 'test',
     })
     expect(stubbedGit.clone).toHaveBeenCalledTimes(1)
+    expect(om.mockFunctions.request).toHaveBeenCalledTimes(0)
+  })
+
+  it('should change settings of a repo for actions', async () => {
+    const caller = t.createCallerFactory(reposRouter)(createTestContext())
+
+    const configSpy = jest.spyOn(config, 'getConfig').mockResolvedValue({
+      publicOrg: 'github',
+      privateOrg: 'github-test',
+    })
+
+    om.mockFunctions.rest.apps.getOrgInstallation.mockResolvedValue(
+      fakeOrgInstallation,
+    )
+    om.mockFunctions.rest.orgs.get.mockResolvedValue(fakeOrg)
+    om.mockFunctions.rest.repos.get.mockResolvedValueOnce(repoNotFound)
+    om.mockFunctions.rest.repos.get.mockResolvedValueOnce(fakeForkRepo)
+    om.mockFunctions.rest.orgs.getAllCustomProperties.mockResolvedValue(
+      fakeOrgCustomProperties,
+    )
+    om.mockFunctions.rest.orgs.createOrUpdateCustomProperty.mockResolvedValue(
+      fakeOrgCustomProperties,
+    )
+    om.mockFunctions.rest.repos.createInOrg.mockResolvedValue(fakeMirrorRepo)
+    om.mockFunctions.request.mockResolvedValue({
+      status: 204,
+    })
+
+    const res = await caller.createMirror({
+      forkId: 'test',
+      orgId: 'test',
+      forkRepoName: 'fork-test',
+      forkRepoOwner: 'github',
+      newBranchName: 'test',
+      newRepoName: 'test',
+      settings: {
+        actions: {
+          enabled: true,
+          allowedActions: 'all',
+        },
+      },
+    })
+
+    // TODO: use real git operations and verify fs state after
+    expect(configSpy).toHaveBeenCalledTimes(1)
+    expect(om.mockFunctions.rest.repos.get).toHaveBeenCalledTimes(2)
+    expect(stubbedGit.clone).toHaveBeenCalledTimes(1)
+    expect(stubbedGit.addRemote).toHaveBeenCalledTimes(1)
+    expect(stubbedGit.push).toHaveBeenCalledTimes(2)
+    expect(stubbedGit.checkoutBranch).toHaveBeenCalledTimes(1)
+    expect(om.mockFunctions.request).toHaveBeenCalledTimes(1)
+    expect(om.mockFunctions.request).toHaveBeenCalledWith(
+      'PUT /repos/{owner}/{repo}/actions/permissions',
+      {
+        owner: 'github-test',
+        repo: 'test',
+        enabled: true,
+        allowed_actions: 'all',
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      },
+    )
+
+    expect(res).toEqual({
+      success: true,
+      data: fakeMirrorRepo.data,
+    })
+  })
+
+  it('allowed_actions should be undefined when actions are not enabled', async () => {
+    const caller = t.createCallerFactory(reposRouter)(createTestContext())
+
+    const configSpy = jest.spyOn(config, 'getConfig').mockResolvedValue({
+      publicOrg: 'github',
+      privateOrg: 'github-test',
+    })
+
+    om.mockFunctions.rest.apps.getOrgInstallation.mockResolvedValue(
+      fakeOrgInstallation,
+    )
+    om.mockFunctions.rest.orgs.get.mockResolvedValue(fakeOrg)
+    om.mockFunctions.rest.repos.get.mockResolvedValueOnce(repoNotFound)
+    om.mockFunctions.rest.repos.get.mockResolvedValueOnce(fakeForkRepo)
+    om.mockFunctions.rest.orgs.getAllCustomProperties.mockResolvedValue(
+      fakeOrgCustomProperties,
+    )
+    om.mockFunctions.rest.orgs.createOrUpdateCustomProperty.mockResolvedValue(
+      fakeOrgCustomProperties,
+    )
+    om.mockFunctions.rest.repos.createInOrg.mockResolvedValue(fakeMirrorRepo)
+    om.mockFunctions.request.mockResolvedValue({
+      status: 204,
+    })
+
+    const res = await caller.createMirror({
+      forkId: 'test',
+      orgId: 'test',
+      forkRepoName: 'fork-test',
+      forkRepoOwner: 'github',
+      newBranchName: 'test',
+      newRepoName: 'test',
+      settings: {
+        actions: {
+          enabled: false,
+          allowedActions: 'all',
+        },
+      },
+    })
+
+    // TODO: use real git operations and verify fs state after
+    expect(configSpy).toHaveBeenCalledTimes(1)
+    expect(om.mockFunctions.rest.repos.get).toHaveBeenCalledTimes(2)
+    expect(stubbedGit.clone).toHaveBeenCalledTimes(1)
+    expect(stubbedGit.addRemote).toHaveBeenCalledTimes(1)
+    expect(stubbedGit.push).toHaveBeenCalledTimes(2)
+    expect(stubbedGit.checkoutBranch).toHaveBeenCalledTimes(1)
+    expect(om.mockFunctions.request).toHaveBeenCalledTimes(1)
+    expect(om.mockFunctions.request).toHaveBeenCalledWith(
+      'PUT /repos/{owner}/{repo}/actions/permissions',
+      {
+        owner: 'github-test',
+        repo: 'test',
+        enabled: false,
+        allowed_actions: undefined,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      },
+    )
+
+    expect(res).toEqual({
+      success: true,
+      data: fakeMirrorRepo.data,
+    })
   })
 
   it('reject repository names over the character limit', async () => {
@@ -276,6 +455,11 @@ describe('Repos router', () => {
         forkRepoOwner: 'github',
         newBranchName: 'test',
         newRepoName: 'a'.repeat(101),
+        settings: {
+          actions: {
+            enabled: false,
+          },
+        },
       })
       .catch((error) => {
         expect(error.message).toMatch(

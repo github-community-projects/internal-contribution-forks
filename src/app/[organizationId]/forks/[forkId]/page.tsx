@@ -36,6 +36,7 @@ import Fuse from 'fuse.js'
 import { useForkData } from 'hooks/useFork'
 import { useOrgData } from 'hooks/useOrganization'
 import { useCallback, useState } from 'react'
+import { RepositorySettingsSchema } from 'server/repos/schema'
 
 const Fork = () => {
   const { organizationId } = useParams()
@@ -204,9 +205,11 @@ const Fork = () => {
     async ({
       repoName,
       branchName,
+      settings,
     }: {
       repoName: string
       branchName: string
+      settings: RepositorySettingsSchema
     }) => {
       // close other flashes and dialogs when this is opened
       closeAllFlashes()
@@ -219,6 +222,7 @@ const Fork = () => {
         forkRepoName: forkData?.data?.name ?? '',
         forkRepoOwner: forkData?.data?.owner.login ?? '',
         forkId: String(forkData?.data?.id),
+        settings,
       })
         .then((res) => {
           if (res.success) {
